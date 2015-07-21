@@ -85,8 +85,8 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.5</real>
-							<real>0.5</real>
+							<real>0.0</real>
+							<real>0.0</real>
 						</array>
 					</dict>
 					<dict>
@@ -146,12 +146,10 @@
 						<array/>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
-		<string>BlueCircle</string>
+		<string>Circle</string>
 		<key>displayName</key>
 		<string>CCNode</string>
 		<key>memberVarAssignmentName</key>
@@ -171,9 +169,9 @@
 			<key>collisionMask</key>
 			<array/>
 			<key>collisionType</key>
-			<string></string>
+			<string>circle</string>
 			<key>cornerRadius</key>
-			<real>28</real>
+			<real>22.5</real>
 			<key>density</key>
 			<real>1</real>
 			<key>dynamic</key>
@@ -185,8 +183,8 @@
 			<key>points</key>
 			<array>
 				<array>
-					<real>0.0</real>
-					<real>0.0</real>
+					<real>24.97216796875</real>
+					<real>25.213165283203125</real>
 				</array>
 			</array>
 			<key>polygons</key>
@@ -223,8 +221,8 @@
 				<string>Size</string>
 				<key>value</key>
 				<array>
-					<real>0.0</real>
-					<real>0.0</real>
+					<real>50</real>
+					<real>50</real>
 					<integer>0</integer>
 					<integer>0</integer>
 				</array>
@@ -236,8 +234,8 @@
 				<string>Point</string>
 				<key>value</key>
 				<array>
-					<real>0.0</real>
-					<real>0.0</real>
+					<real>0.5</real>
+					<real>0.5</real>
 				</array>
 			</dict>
 			<dict>
@@ -254,6 +252,8 @@
 				</array>
 			</dict>
 		</array>
+		<key>selected</key>
+		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>
