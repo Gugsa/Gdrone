@@ -11,19 +11,25 @@ import Foundation
 enum State {
     case OnScreen
     case OffScreen
+    case UserInteracting
 }
 
 class Circle: CCNode {
     
     var circleColor: String?
     var state: State = .OffScreen
-    var minVelocityY: Int = -150
-    var fallImpulse: CGFloat = -10
+    var fallSpeed: Int = -150
+//    var fallImpulse: CGFloat = -10
     
     
-    override func update(delta: CCTime) {
-        let velocityY = clampf(Float(self.physicsBody.velocity.y),Float(minVelocityY),0)
-        self.physicsBody.velocity = ccp(0, CGFloat(velocityY))
-        self.physicsBody.applyImpulse(ccp(0,fallImpulse))
-    }
+    
+    
+//    override func update(delta: CCTime) {
+//        
+//        if state != .UserInteracting{
+//            let velocityY = clampf(Float(self.physicsBody.velocity.y),Float(minVelocityY),0)
+//            self.physicsBody.velocity = ccp(0, CGFloat(velocityY))
+//            self.physicsBody.applyImpulse(ccp(0,fallImpulse))
+//        }
+//    }
 }

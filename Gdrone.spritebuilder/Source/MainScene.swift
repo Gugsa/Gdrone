@@ -14,7 +14,7 @@ class MainScene: CCNode {
     var circles : [Circle] = []
 
     let typesOfObjects: Int = 4
-    let multiplier: Int = 3
+    let multiplier: Int = 4
 
     weak var greenCircle : CCNode!
     weak var yellowCircle: CCNode!
@@ -27,8 +27,10 @@ class MainScene: CCNode {
     weak var blueRectangle : CCNode!
     weak var checkpoint: CCNode!
         
-    var selectedCircle : CCNode?
-    var selectCircle: Bool = false
+    var selectedCircle : Circle?
+    var startPoint : CGPoint?
+    
+    
     
 
 
@@ -40,7 +42,6 @@ class MainScene: CCNode {
             userInteractionEnabled = true
             gamePhysicsNode.collisionDelegate = self
             checkpoint.physicsBody.sensor = true
-            setupGestures()
             
         }
 
@@ -105,12 +106,14 @@ class MainScene: CCNode {
             circle.visible = true
         
         }
-        
-
+    
+   
 // MARK: Touch methods
     
         override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
             detectTouch(touch)
+            startPoint = touch.locationInWorld()
+            
             
         }
         
@@ -127,10 +130,12 @@ class MainScene: CCNode {
                 let maxX = circle.x + size.width/2
                 let minY = circle.y - size.height/2
                 let maxY = circle.y + size.height/2
+
                 
                 if currentTouch.x > minX && currentTouch.x < maxX && currentTouch.y > minY && currentTouch.y < maxY{
-                    selectCircle = true
+
                     selectedCircle = circleGlobal
+                    circleGlobal.state = .UserInteracting
                     println("Selected")
     
                 }
@@ -138,23 +143,34 @@ class MainScene: CCNode {
         }
 
         override func touchMoved(touch: CCTouch!, withEvent event: CCTouchEvent!){
-            selectedCircle!.position = touch.locationInWorld()
-            if selectedCircle?.position == touch.locationInWorld(){
-                stopAllActions()
-            } else{
-                println("action continue")
+            if let c = selectedCircle {
+                c.position = touch.locationInWorld()
             }
-    
-           // println(touch.locationInWorld())
+
         }
     
         override func touchEnded(touch: CCTouch!, withEvent event: CCTouchEvent!) {
-            
+            var endPoint = touch.locationInWorld()
+            var speed = hypotf(Float(startPoint!.x - endPoint.x), Float((startPoint!.y - endPoint.y)))
+            //selectedCircle?.physicsBody.applyImpulse(ccp(2500, -2500))
+            selectedCircle?.state = .OnScreen
+            selectedCircle = nil
+            //println(startPoint!)
+            //println(endPoint)
         }
 
 
         override func update(delta: CCTime) {
-            
+            for circle in circles {
+                if circle.state != .UserInteracting {
+//                    let velocityY = clampf(Float(circle.physicsBody.velocity.y),Float(circle.minVelocityY),0)
+                    circle.physicsBody.velocity = ccp(0, CGFloat(circle.fallSpeed))
+                    //circle.physicsBody.applyImpulse(ccp(0,circle.fallImpulse))
+                } else {
+                    circle.physicsBody.velocity = ccp(0, 0)
+
+                }
+            }
         }
 
 
@@ -162,33 +178,6 @@ class MainScene: CCNode {
         func move(direction: CGPoint){
         }
 
-        
-// MARK: Swipe Gestures
-
-        func setupGestures() {
-            var swipeLeft = UISwipeGestureRecognizer(target: self, action: "swipeLeft")
-            swipeLeft.direction = .Left
-            CCDirector.sharedDirector().view.addGestureRecognizer(swipeLeft)
-            
-            var swipeRight = UISwipeGestureRecognizer(target: self, action: "swipeRight")
-            swipeRight.direction = .Right
-            CCDirector.sharedDirector().view.addGestureRecognizer(swipeRight)
-        }
-
-
-
-        func swipeLeft() {
-           println("Swipe Left!")
-            
-        }
-
-
-
-        func swipeRight() {
-            println("Swipe Right!")
-        }
-
-        
 
 // MARK: Game Logic
 
@@ -207,16 +196,12 @@ class MainScene: CCNode {
 
 // MARK: CCPhysicsCollisionDelegate
 
-        extension MainScene: CCPhysicsCollisionDelegate {
-            func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, circle: CCNode!, level: CCNode!) -> Bool {
-                triggerGameOver()
-                return true
-            }
-            
+extension MainScene: CCPhysicsCollisionDelegate {
+    
             func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, circle: Circle!, checkpoint: CCNode!) -> Bool {
-                circle.state = .OffScreen
-                return true
-            }
+            circle.state = .OffScreen
+            return true
         }
+}
 
 
